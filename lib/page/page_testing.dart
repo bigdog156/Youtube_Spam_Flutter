@@ -78,19 +78,19 @@ class _PageMainState extends State<PageMain> {
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
-          value: 'Helo',
+          value: 'LIKE THIS COMMENT IF YOU ARE WATCHING.',
           child: Text('Example1 - Spam'),
         ),
         const PopupMenuItem<String>(
-          value: '1',
+          value: 'Such a shame that this song didnt reach 1B in 10 years',
           child: Text('Example2 - NoSpam'),
         ),
         const PopupMenuItem<String>(
-          value: '3',
+          value: 'I just remembered the song because of Alvin',
           child: Text('Example3 - NoSpam'),
         ),
         const PopupMenuItem<String>(
-          value: '4',
+          value: 'Take a look at this video on YouTube',
           child: Text('Example4 - Spam'),
         ),
       ],

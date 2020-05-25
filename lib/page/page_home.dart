@@ -6,14 +6,48 @@ class PageHome extends StatefulWidget {
 }
 
 class _PageHomeState extends State<PageHome> {
+  final List<String> listName = [
+    'Nguyễn Đức Nguyện',
+    'Phan Đăng Lâm',
+    'Nguyễn Đình Vinh',
+    'Lê Quang Hưng',
+    'Lê Thạch Lâm'
+  ];
+  final List<String> listMSSV=[
+    '16520843',
+    '16521710',
+    '16521582',
+    '16520473',
+    '16521516'
+  ];
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          SizedBox(height: 50,),
+          Container(
+            child: Text('Khai thác dữ liệu và ứng dụng',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            child: Text('CS313.K21',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            height: 100,
+            child: Image.asset('fire1.png', fit: BoxFit.cover,),
+          ),
           Container(
             margin: EdgeInsets.all(10),
             height: 50,
@@ -26,7 +60,54 @@ class _PageHomeState extends State<PageHome> {
               )
             ),
               child: Text('Group 5 - Fire', style: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.bold
               ),)
+          ),
+          Text("Thành viên",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 20),
+          buildMembers(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildMembers(){
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Column(
+            children: List.generate(5, (index) {
+              return Container(
+                height: 30,
+                child: Row(
+                  children: <Widget>[
+                    index == 4? Icon(Icons.card_membership, size: 18,):
+                    Icon(Icons.person, size: 18,),
+                    SizedBox(width: 10),
+                    Text(listName[index]),
+                  ],
+                ),
+              );
+            }),
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+          ),
+          Column(
+            children: List.generate(5, (index) {
+              return Container(
+                alignment: Alignment.center,
+                height:30,
+                child: Text(listMSSV[index]),
+              );
+            }),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
           )
         ],
       ),
