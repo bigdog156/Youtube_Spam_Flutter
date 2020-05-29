@@ -1,8 +1,15 @@
+import 'package:Youtube_Spam/model/algorithm.dart';
+import 'package:Youtube_Spam/page/page_home.dart';
 import 'package:Youtube_Spam/page/youtube_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+  ChangeNotifierProvider(
+    create: (context) => Algorithm(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

@@ -1,7 +1,11 @@
+import 'package:Youtube_Spam/model/algorithm.dart';
+import 'package:Youtube_Spam/widgets/dropdown_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Youtube_Spam/repo/repo_api.dart';
 import 'package:Youtube_Spam/model/result.dart';
 import 'dart:async';
+
+import 'package:provider/provider.dart';
 
 class PageMain extends StatefulWidget {
   @override
@@ -14,16 +18,21 @@ class _PageMainState extends State<PageMain> {
   String text="";
   Future<Result> result;
   TextEditingController editingController;
-  int algo ;
+  String algorithm;
   @override
   void initState() {
     editingController = TextEditingController();
-    apiRepo = ApiRepo(urlApi: "http://192.168.43.239:1998/");
+    apiRepo = ApiRepo(urlApi: "http://127.0.0.1:1998/");
     // TODO: implement initState
     super.initState();
   }
   @override
-
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print(algorithm);
+  }
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
@@ -35,10 +44,10 @@ class _PageMainState extends State<PageMain> {
             titleGroup(),
             formInputTest(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                DropDownButtonAlgorithm(),
                 buttonSend(),
-                buildChoice()
               ],
             ),
             buildPopupMenu(),
@@ -49,26 +58,6 @@ class _PageMainState extends State<PageMain> {
     );
   }
 
-  Widget buildChoice() {
-    return PopupMenuButton<int>(
-      child: buttonChoice(),
-      onSelected: (int value) {
-        setState(() {
-          algo = value;
-        });
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-        const PopupMenuItem<int>(
-          value: 0,
-          child: Text('LSTM Algorithm'),
-        ),
-        const PopupMenuItem<int>(
-          value: 1,
-          child: Text('Naive - Bayes'),
-        ),
-      ],
-    );
-  }
   Widget buildPopupMenu() {
     return PopupMenuButton<String>(
       onSelected: (String result) {
@@ -103,21 +92,34 @@ class _PageMainState extends State<PageMain> {
       child: RaisedButton(
         color: Theme.of(context).primaryColor,
         onPressed: ()async{
+          String algorithmValue = Provider.of<Algorithm>(context, listen: false).algorithm;
           setState(() {
             intResult = null;
           });
           text = editingController.value.text;
-          if(algo == 0)  {
 
-            apiRepo.getResultLSMT(text).then((value) {
-              setState(() {
-                intResult = value.result;
+          if(algorithmValue == 'LSTM' && text!='')  {
+            Future.delayed(Duration(seconds: 1), (){
+              apiRepo.getResultLSMT(text).then((value) {
+                setState(() {
+                  intResult = value.result;
+                });
               });
             });
-          }else{
-            apiRepo.getResultNP(text).then((value){
-              setState(() {
-                intResult = value.result;
+          }else if(algorithmValue == 'NP' && text!=''){
+            Future.delayed(Duration(seconds: 1),(){
+              apiRepo.getResultNP(text).then((value){
+                setState(() {
+                  intResult = value.result;
+                });
+              });
+            });
+          }else if(algorithmValue =='SVM'&& text!=''){
+            Future.delayed(Duration(seconds: 1), (){
+              apiRepo.getResultSVM(text).then((value){
+                setState(() {
+                  intResult = value.result;
+                });
               });
             });
           }
@@ -131,24 +133,7 @@ class _PageMainState extends State<PageMain> {
       ),
     );
   }
-  Widget buttonChoice(){
-    return Container(
-      margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.2),
-      alignment: Alignment.center,
-      width: MediaQuery.of(context).size.width*0.3,
-      height: 35,
-      child: Container(
-//        color: Theme.of(context).primaryColor,
-        child:Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Text(algo == 0? "LTMS": "NP" , style: TextStyle(color: Colors.black),),
-            Icon(Icons.bubble_chart, color: Colors.black,)
-          ],
-        ),
-      ),
-    );
-  }
+
   Widget titleGroup(){
     return Container(
       padding: EdgeInsets.all(10),
@@ -186,7 +171,7 @@ class _PageMainState extends State<PageMain> {
             hintText: "Typing ..."),
         controller: editingController,
         textInputAction:TextInputAction.done ,
-        maxLines: 3,
+        maxLines: 7,
       ),
     );
   }
@@ -219,5 +204,6 @@ class _PageMainState extends State<PageMain> {
       return Text("NO SPAM");
     }
   }
+
 }
 

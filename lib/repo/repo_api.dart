@@ -19,6 +19,16 @@ class ApiRepo{
     Result result = resultFromJson(response.toString());
     return result;
   }
+  Future<Result> getResultSVM(String data) async{
+    Response response = await Dio().post(urlApi+"/svm",
+        data: {
+          "DATA": data
+        }
+    );
+    print(response.data.toString());
+    Result result = resultFromJson(response.toString());
+    return result;
+  }
 
   Future<Result> getResultLSMT(String data) async{
     Response response = await Dio().post(urlApi+"/lstm",
