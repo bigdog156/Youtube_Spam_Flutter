@@ -49,6 +49,10 @@ class _PageHomeState extends State<PageHome> {
             child: Image.asset('fire1.png', fit: BoxFit.cover,),
           ),
           Container(
+            padding: EdgeInsets.all(20),
+            child: Text('GVHD: Cô Nguyễn Thị Anh Thư'),
+          ),
+          Container(
             margin: EdgeInsets.all(10),
             height: 50,
             width: MediaQuery.of(context).size.width*0.6,

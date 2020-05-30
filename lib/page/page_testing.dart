@@ -1,4 +1,5 @@
 import 'package:Youtube_Spam/model/algorithm.dart';
+import 'package:Youtube_Spam/widgets/dropdown_basic.dart';
 import 'package:Youtube_Spam/widgets/dropdown_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Youtube_Spam/repo/repo_api.dart';
@@ -17,47 +18,79 @@ class _PageMainState extends State<PageMain> {
   int intResult;
   String text="";
   Future<Result> result;
+  Result proResult;
   TextEditingController editingController;
   String algorithm;
+  String preProcess;
   @override
   void initState() {
     editingController = TextEditingController();
     apiRepo = ApiRepo(urlApi: "http://127.0.0.1:1998/");
     // TODO: implement initState
+    preProcess = '';
     super.initState();
   }
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    print(algorithm);
   }
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            titleGroup(),
-            formInputTest(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                DropDownButtonAlgorithm(),
-                buttonSend(),
-              ],
-            ),
-            buildPopupMenu(),
-            resultWidget()
-          ],
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              titleGroup(),
+              formInputTest(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  DropDownButtonAlgorithm(),
+                  buttonSend(),
+                ],
+              ),
+              buildPopupMenu(),
+              resultWidget(),
+              SizedBox(height: 20,),
+              Divider(),
+              buildDropdown(context),
+              preProcessing(),
+            ],
+          ),
         ),
       ),
     );
   }
-
+  Widget buildDropdown(BuildContext context){
+    List<String> _items = ['Clean Text','Tokenization','Lemmatization'];
+    return Container(
+      child: Consumer<Algorithm>(
+        builder: (context, item, child){
+          return DropDownBasic(
+            value: item.preProcessText,
+            items: _items,
+            stringCallback: (String newValue){
+              setState(() {
+                item.changePreProcessText(newValue);
+                if( newValue == "Clean Text"){
+                  preProcess = proResult.one;
+                }else if(newValue == 'Tokenization'){
+                  preProcess = proResult.two;
+                }else{
+                  preProcess = proResult.three;
+                }
+              });
+            },
+          );
+        }
+      ),
+    );
+  }
   Widget buildPopupMenu() {
     return PopupMenuButton<String>(
       onSelected: (String result) {
@@ -99,26 +132,33 @@ class _PageMainState extends State<PageMain> {
           text = editingController.value.text;
 
           if(algorithmValue == 'LSTM' && text!='')  {
-            Future.delayed(Duration(seconds: 1), (){
+            Future.delayed(Duration(milliseconds: 30), (){
               apiRepo.getResultLSMT(text).then((value) {
                 setState(() {
+                  preProcess = "";
                   intResult = value.result;
+                  proResult = value;
                 });
               });
             });
           }else if(algorithmValue == 'NP' && text!=''){
-            Future.delayed(Duration(seconds: 1),(){
+
+            Future.delayed(Duration(milliseconds: 30),(){
               apiRepo.getResultNP(text).then((value){
                 setState(() {
+                  preProcess = "";
                   intResult = value.result;
+                  proResult = value;
                 });
               });
             });
           }else if(algorithmValue =='SVM'&& text!=''){
-            Future.delayed(Duration(seconds: 1), (){
+            Future.delayed(Duration(milliseconds: 30), (){
               apiRepo.getResultSVM(text).then((value){
                 setState(() {
+                  preProcess = "";
                   intResult = value.result;
+                  proResult = value;
                 });
               });
             });
@@ -141,6 +181,7 @@ class _PageMainState extends State<PageMain> {
         children: <Widget>[
           Text("Group 5 - Fire ", style: TextStyle(
             fontSize: 15,
+            fontWeight: FontWeight.bold
           ),
           ),
           Container(
@@ -155,7 +196,7 @@ class _PageMainState extends State<PageMain> {
   Widget formInputTest(){
     return Container(
       width: MediaQuery.of(context).size.width*0.8,
-      margin: EdgeInsets.only(left: 10),
+//      margin: EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Theme.of(context).primaryColor)
@@ -175,10 +216,10 @@ class _PageMainState extends State<PageMain> {
       ),
     );
   }
-  // Truyền kết quả vào
+
   Widget resultWidget(){
     return Container(
-      margin: EdgeInsets.only(left: 10),
+//      margin: EdgeInsets.only(left: 10),
       height: 50,
       width: MediaQuery.of(context).size.width* 0.8,
       decoration: BoxDecoration(
@@ -199,11 +240,44 @@ class _PageMainState extends State<PageMain> {
       return Text("...");
     }
     if(intResult == 0){
-      return Text("SPAM");
+      return Row(
+        children: <Widget>[
+          Icon(Icons.warning, color: Colors.red,size: 17,),
+          SizedBox(width: 10,),
+          Text("SPAM"),
+        ],
+      );
     }else{
-      return Text("NO SPAM");
+      return Row(
+        children: <Widget>[
+          Icon(Icons.check_circle, color: Theme.of(context).primaryColor,size: 17,),
+          SizedBox(width: 10,),
+          Text("NO SPAM"),
+        ],
+      );
     }
   }
-
+  Widget preProcessing(){
+    return Container(
+//      margin: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.all(10),
+      height: 200,
+      width: MediaQuery.of(context).size.width* 0.9,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+              color: Theme.of(context).primaryColor
+          )
+      ),
+      child: Column(
+        children: <Widget>[
+          Text("Preprocessing", style: TextStyle(fontSize: 20),),
+          Expanded(
+              child: preProcess == null?Container():Text(preProcess),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
