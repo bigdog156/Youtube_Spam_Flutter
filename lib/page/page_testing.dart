@@ -17,10 +17,8 @@ class _PageMainState extends State<PageMain> {
   ApiRepo apiRepo;
   int intResult;
   String text="";
-  Future<Result> result;
   Result proResult;
   TextEditingController editingController;
-  String algorithm;
   String preProcess;
   @override
   void initState() {
@@ -41,7 +39,6 @@ class _PageMainState extends State<PageMain> {
       child: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -58,6 +55,10 @@ class _PageMainState extends State<PageMain> {
               resultWidget(),
               SizedBox(height: 20,),
               Divider(),
+              Container(
+                  width: MediaQuery.of(context).size.width*0.9,
+                  child: Text("Preprocessing", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
+              ),
               buildDropdown(context),
               preProcessing(),
             ],
@@ -67,7 +68,7 @@ class _PageMainState extends State<PageMain> {
     );
   }
   Widget buildDropdown(BuildContext context){
-    List<String> _items = ['Clean Text','Tokenization','Lemmatization'];
+    List<String> _items = ['Clean Text','Tokenization','Lemmatization','Vector'];
     return Container(
       child: Consumer<Algorithm>(
         builder: (context, item, child){
@@ -78,11 +79,13 @@ class _PageMainState extends State<PageMain> {
               setState(() {
                 item.changePreProcessText(newValue);
                 if( newValue == "Clean Text"){
-                  preProcess = proResult.one;
+                  preProcess = proResult.standardize;
                 }else if(newValue == 'Tokenization'){
-                  preProcess = proResult.two;
+                  preProcess = proResult.tokens;
+                }else if (newValue == 'Lemmatization'){
+                  preProcess = proResult.lenmatizer;
                 }else{
-                  preProcess = proResult.three;
+                  preProcess = proResult.vector;
                 }
               });
             },
@@ -176,11 +179,11 @@ class _PageMainState extends State<PageMain> {
 
   Widget titleGroup(){
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(15),
       child: Row(
         children: <Widget>[
           Text("Group 5 - Fire ", style: TextStyle(
-            fontSize: 15,
+            fontSize: 20,
             fontWeight: FontWeight.bold
           ),
           ),
@@ -259,7 +262,6 @@ class _PageMainState extends State<PageMain> {
   }
   Widget preProcessing(){
     return Container(
-//      margin: EdgeInsets.only(left: 10),
       padding: EdgeInsets.all(10),
       height: 200,
       width: MediaQuery.of(context).size.width* 0.9,
@@ -269,10 +271,11 @@ class _PageMainState extends State<PageMain> {
               color: Theme.of(context).primaryColor
           )
       ),
-      child: Column(
+      child: ListView(
+        shrinkWrap: true,
         children: <Widget>[
-          Text("Preprocessing", style: TextStyle(fontSize: 20),),
-          Expanded(
+          SizedBox(height: 10,),
+          Container(
               child: preProcess == null?Container():Text(preProcess),
           ),
         ],

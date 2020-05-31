@@ -6,29 +6,33 @@ String resultToJson(Result data) => json.encode(data.toJson());
 
 class Result {
   int result;
-  String one;
-  String three;
-  String two;
-
+  String lenmatizer;
+  String standardize;
+  String tokens;
+  String vector;
   Result({
     this.result,
-    this.one,
-    this.three,
-    this.two,
+    this.lenmatizer,
+    this.standardize,
+    this.tokens,
+    this.vector
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     result: json["Result"],
-    one: json["one"],
-    three: json["three"],
-    two: json["two"],
+    lenmatizer: json["lenmatizer"],
+    standardize: json["standardize"],
+    tokens: json["tokens"],
+    vector: json["vector"],
   );
 
   Map<String, dynamic> toJson() => {
     "Result": result,
-    "one": one,
-    "three": three,
-    "two": two,
+    "lenmatizer": lenmatizer,
+    "standardize": standardize,
+    "tokens": tokens,
+    "vector": vector
   };
 }
+
 
