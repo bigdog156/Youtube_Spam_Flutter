@@ -14,7 +14,8 @@ class _YoutubeSpamPageState extends State<YoutubeSpamPage> {
 
   List<Widget> _list = [
     PageHome(),
-    PageMain()
+    PageMain(),
+    PageMultiTask()
   ];
   int _currentIndex = 0;
   @override
@@ -51,6 +52,10 @@ class _YoutubeSpamPageState extends State<YoutubeSpamPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.assignment),
             title: Text('Testing')
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.assessment),
+              title: Text('Multi Testing')
           )
         ],
       )

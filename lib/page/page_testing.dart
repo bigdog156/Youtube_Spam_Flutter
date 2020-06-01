@@ -1,6 +1,7 @@
 import 'package:Youtube_Spam/model/algorithm.dart';
 import 'package:Youtube_Spam/widgets/dropdown_basic.dart';
 import 'package:Youtube_Spam/widgets/dropdown_button.dart';
+import 'package:Youtube_Spam/widgets/title_group.dart';
 import 'package:flutter/material.dart';
 import 'package:Youtube_Spam/repo/repo_api.dart';
 import 'package:Youtube_Spam/model/result.dart';
@@ -32,6 +33,13 @@ class _PageMainState extends State<PageMain> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    apiRepo = ApiRepo(urlApi: Provider.of<Algorithm>(context).url);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    editingController.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -42,7 +50,7 @@ class _PageMainState extends State<PageMain> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              titleGroup(),
+              TitleGroup(),
               formInputTest(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -103,20 +111,20 @@ class _PageMainState extends State<PageMain> {
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
-          value: 'LIKE THIS COMMENT IF YOU ARE WATCHING.',
-          child: Text('Example1 - Spam'),
+          value: "hey guys!! visit my channel pleaase (i'm searching a dream), https://www.youtube.com/watch?, nanidefk@gmail.com, 888.888.8888, 100.000 ",
+          child: Text('Example1'),
         ),
         const PopupMenuItem<String>(
           value: 'Such a shame that this song didnt reach 1B in 10 years',
-          child: Text('Example2 - NoSpam'),
+          child: Text('Example2'),
         ),
         const PopupMenuItem<String>(
           value: 'I just remembered the song because of Alvin',
-          child: Text('Example3 - NoSpam'),
+          child: Text('Example3'),
         ),
         const PopupMenuItem<String>(
           value: 'Take a look at this video on YouTube',
-          child: Text('Example4 - Spam'),
+          child: Text('Example4'),
         ),
       ],
     );
@@ -177,25 +185,6 @@ class _PageMainState extends State<PageMain> {
     );
   }
 
-  Widget titleGroup(){
-    return Container(
-      padding: EdgeInsets.all(15),
-      child: Row(
-        children: <Widget>[
-          Text("Group 5 - Fire ", style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold
-          ),
-          ),
-          Container(
-              width: 50,
-              height: 50,
-              child: Image.asset('fire1.png', fit: BoxFit.fill,)
-          )
-        ],
-      ),
-    );
-  }
   Widget formInputTest(){
     return Container(
       width: MediaQuery.of(context).size.width*0.8,
@@ -222,7 +211,6 @@ class _PageMainState extends State<PageMain> {
 
   Widget resultWidget(){
     return Container(
-//      margin: EdgeInsets.only(left: 10),
       height: 50,
       width: MediaQuery.of(context).size.width* 0.8,
       decoration: BoxDecoration(

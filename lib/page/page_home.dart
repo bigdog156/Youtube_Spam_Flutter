@@ -1,5 +1,6 @@
+import 'package:Youtube_Spam/model/algorithm.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 class PageHome extends StatefulWidget {
   @override
   _PageHomeState createState() => _PageHomeState();
@@ -75,6 +76,7 @@ class _PageHomeState extends State<PageHome> {
           ),
           SizedBox(height: 20),
           buildMembers(),
+          buttonConfig(context)
         ],
       ),
     );
@@ -112,9 +114,23 @@ class _PageHomeState extends State<PageHome> {
             }),
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-          )
+          ),
         ],
       ),
+    );
+  }
+  
+  Widget buttonConfig(BuildContext context){
+    return Consumer<Algorithm>(
+      builder: (context, value, child){
+        return OutlineButton(
+          color: Colors.white,
+          onPressed: (){
+            Navigator.pushNamed(context, '/config');
+          },
+          child: Text("Config"),
+        );
+      },
     );
   }
 }

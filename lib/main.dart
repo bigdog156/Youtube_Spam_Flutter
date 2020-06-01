@@ -1,4 +1,5 @@
 import 'package:Youtube_Spam/model/algorithm.dart';
+import 'package:Youtube_Spam/page/config_page.dart';
 import 'package:Youtube_Spam/page/page_home.dart';
 import 'package:Youtube_Spam/page/youtube_page.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(),
+//      home: MyHomePage(),
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => MyHomePage(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/config': (context) => ConfigPage(),
+      },
     );
   }
 }
