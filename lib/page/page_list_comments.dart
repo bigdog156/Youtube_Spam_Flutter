@@ -26,6 +26,11 @@ class _PageMultiTaskState extends State<PageMultiTask> {
     apiRepo = ApiRepo(urlApi: "http://127.0.0.1:1998/");
   }
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
